@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='utf-8'?>
+<plugin id="cordova-plugin-qrcode" version="0.0.1" xmlns="http://apache.org/cordova/ns/plugins/1.0">
+    <name>CDVQRCode</name>
+    <js-module name="CDVQRCode" src="www/qrcode.js">
+        <clobbers target="CDVQRCode" />
+    </js-module>
+    <platform name="ios">
+        <config-file parent="/*" target="config.xml">
+            <feature name="CDVQRCode">
+                <param name="ios-package" value="CDVQRCode" />
+            </feature>
+        </config-file>
+        <header-file src="src/ios/CDVQRCode.h" />
+        <source-file src="src/ios/CDVQRCode.m" />
+        <podspec>
+            <config>
+                <source url="https://github.com/CocoaPods/Specs.git"/>
+            </config>
+            <pods use-frameworks="true">
+                <pod name="SGQRCode" />
+            </pods>
+        </podspec>
+
+    </platform>
+</plugin>

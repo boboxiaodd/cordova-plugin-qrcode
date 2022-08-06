@@ -1,0 +1,14 @@
+{
+    "name": "qrcode",
+    "version": "0.0.1",
+    "description": "cordova qrcode",
+    "cordova": {
+        "id": "qrcode",
+        "platforms": [
+            "ios"
+        ]
+    },
+    "keywords": [],
+    "author": "bobo",
+    "license": "MIT"
+}
