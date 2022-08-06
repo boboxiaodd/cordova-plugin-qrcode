@@ -12,6 +12,8 @@
         </config-file>
         <header-file src="src/ios/CDVQRCode.h" />
         <source-file src="src/ios/CDVQRCode.m" />
+        <header-file src="src/ios/WBQRCodeVC.h" />
+        <source-file src="src/ios/WBQRCodeVC.m" />
         <podspec>
             <config>
                 <source url="https://github.com/CocoaPods/Specs.git"/>
