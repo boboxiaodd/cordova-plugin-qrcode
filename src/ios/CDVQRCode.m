@@ -1,9 +1,9 @@
 #import <Cordova/CDV.h>
 #import "CDVQRCode.h"
 #import "WBQRCodeVC.h"
+#import "MyNavigationController.h"
 
 @implementation CDVQRCode
-- (void)pluginInitialize
 - (void)scan_qrcode:(CDVInvokedUrlCommand *)command
 {
     WBQRCodeVC * vc = [[WBQRCodeVC alloc] init];

@@ -8,10 +8,9 @@
 #import "WBQRCodeVC.h"
 #import "SGQRCode.h"
 
-@interface WBQRCodeVC () {
+@interface WBQRCodeVC ()<SGScanCodeDelegate,SGScanCodeSampleBufferDelegate> {
     SGScanCode *scanCode;
 }
-@property (nonatomic, strong) SGScanView *scanView;
 @property (nonatomic, strong) UILabel *promptLabel;
 @property (nonatomic, assign) BOOL stop;
 @end
@@ -20,9 +19,10 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
+
     if (_stop) {
-        [scanCode startRunningWithBefore:nil completion:nil];
+        [scanCode startRunning];
+//        [scanCode startRunningWithBefore:nil completion:nil];
     }
 }
 
@@ -40,27 +40,33 @@
     // Do any additional setup after loading the view from its nib.
     self.view.backgroundColor = [UIColor blackColor];
     scanCode = [SGScanCode scanCode];
-    
+    scanCode.preview = self.view;
     [self setupQRCodeScan];
     [self setupNavigationBar];
-    [self.view addSubview:self.scanView];
-    [self.scanView startScanning];
+    [scanCode startRunning];
     [self.view addSubview:self.promptLabel];
 }
 
 - (void)setupQRCodeScan {
-    __weak typeof(self) weakSelf = self;
-    [scanCode scanWithController:self resultBlock:^(SGScanCode *scanCode, NSString *result) {
-        NSLog(@"scan result: %@",result);
-        if (result) {
-            [scanCode stopRunning];
-            weakSelf.stop = YES;
-            [scanCode playSoundName:@"SGQRCode.bundle/scanEndSound.caf"];
-            weakSelf.callBackBlock(result);
-            [weakSelf dismissViewControllerAnimated:YES completion:nil];
-        }
-    }];
-    [scanCode startRunningWithBefore:^{} completion:^{}];
+
+    [scanCode setDelegate:self];
+    [scanCode setSampleBufferDelegate:self];
+}
+
+- (void)scanCode:(SGScanCode *)scanCode result:(NSString *)result
+{
+    NSLog(@"scan result: %@",result);
+    if (result) {
+        [scanCode stopRunning];
+        self.stop = YES;
+        [scanCode playSoundEffect:@"SGQRCode.bundle/scanEndSound.caf"];
+        self.callBackBlock(result);
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
+}
+- (void)scanCode:(SGScanCode *)scanCode brightness:(CGFloat)brightness
+{
+
 }
 
 - (void)setupNavigationBar {
@@ -76,20 +82,8 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (SGScanView *)scanView {
-    if (!_scanView) {
-        _scanView = [[SGScanView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
-        _scanView.scanLineName = @"SGQRCode.bundle/scanLineGrid";
-        _scanView.scanStyle = ScanStyleGrid;
-        _scanView.cornerLocation = CornerLoactionOutside;
-        _scanView.cornerColor = [UIColor orangeColor];
-    }
-    return _scanView;
-}
 - (void)removeScanningView {
-    [self.scanView stopScanning];
-    [self.scanView removeFromSuperview];
-    self.scanView = nil;
+    [scanCode stopRunning];
 }
 
 
