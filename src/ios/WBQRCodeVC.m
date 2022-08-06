@@ -11,6 +11,7 @@
 @interface WBQRCodeVC ()<SGScanCodeDelegate,SGScanCodeSampleBufferDelegate> {
     SGScanCode *scanCode;
 }
+@property (nonatomic, strong) SGScanView *scanView;
 @property (nonatomic, strong) UILabel *promptLabel;
 @property (nonatomic, assign) BOOL stop;
 @end
@@ -43,8 +44,9 @@
     scanCode.preview = self.view;
     [self setupQRCodeScan];
     [self setupNavigationBar];
-    [scanCode startRunning];
+    [self.view addSubview:self.scanView];
     [self.view addSubview:self.promptLabel];
+    [scanCode startRunning];
 }
 
 - (void)setupQRCodeScan {
@@ -59,7 +61,7 @@
     if (result) {
         [scanCode stopRunning];
         self.stop = YES;
-        [scanCode playSoundEffect:@"SGQRCode.bundle/scanEndSound.caf"];
+        [scanCode playSoundEffect:@"SGQRCode.bundle/scan_end_sound.caf"];
         self.callBackBlock(result);
         [self dismissViewControllerAnimated:YES completion:nil];
     }
@@ -86,6 +88,28 @@
     [scanCode stopRunning];
 }
 
+- (SGScanView *)scanView {
+    if (!_scanView) {
+        SGScanViewConfigure *configure = [[SGScanViewConfigure alloc] init];
+        configure.isShowBorder = YES;
+        configure.borderColor = [UIColor clearColor];
+        configure.cornerColor = [UIColor whiteColor];
+        configure.cornerWidth = 3;
+        configure.cornerLength = 15;
+        configure.isFromTop = YES;
+        configure.scanline = @"SGQRCode.bundle/scan_scanline_qq";
+        configure.color = [UIColor clearColor];
+
+        CGFloat x = 0;
+        CGFloat y = 0;
+        CGFloat w = self.view.frame.size.width;
+        CGFloat h = self.view.frame.size.height;
+        _scanView = [[SGScanView alloc] initWithFrame:CGRectMake(x, y, w, h) configure:configure];
+        [_scanView startScanning];
+        _scanView.scanFrame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
+    }
+    return _scanView;
+}
 
 - (UILabel *)promptLabel {
     if (!_promptLabel) {
