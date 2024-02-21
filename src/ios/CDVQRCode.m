@@ -6,10 +6,14 @@
 @implementation CDVQRCode
 - (void)scan_qrcode:(CDVInvokedUrlCommand *)command
 {
+    NSDictionary *options = [command.arguments objectAtIndex: 0];
     WBQRCodeVC * vc = [[WBQRCodeVC alloc] init];
     MyNavigationController * nc = [[MyNavigationController alloc] initWithRootViewController:vc];
     nc.modalPresentationStyle = UIModalPresentationFullScreen;
     [self.viewController presentViewController:nc animated:YES completion:nil];
+    vc.centerTitle = [options valueForKey:@"centerTitle"];
+    vc.cancelTitle = [options valueForKey:@"cancelTitle"];
+    vc.bottomTitle = [options valueForKey:@"bottomTitle"];
     vc.callBackBlock = ^(NSString *result) {
         [self send_event:command withMessage:@{@"result":result} Alive:YES State:YES];
     };
