@@ -74,8 +74,8 @@
 - (void)setupNavigationBar {
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
-    self.navigationItem.title = @"扫一扫";
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:(UIBarButtonItemStyleDone) target:self action:@selector(rightBarButtonItenAction)];
+    self.navigationItem.title = self.centerTitle;
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle: self.cancelTitle style:(UIBarButtonItemStyleDone) target:self action:@selector(rightBarButtonItenAction)];
     self.navigationItem.rightBarButtonItem.tintColor = [UIColor whiteColor];
 }
 
@@ -123,7 +123,7 @@
         _promptLabel.textAlignment = NSTextAlignmentCenter;
         _promptLabel.font = [UIFont boldSystemFontOfSize:13.0];
         _promptLabel.textColor = [[UIColor whiteColor] colorWithAlphaComponent:0.6];
-        _promptLabel.text = @"将二维码/条码放入框内, 即可自动扫描";
+        _promptLabel.text = self.bottomTitle;
     }
     return _promptLabel;
 }
