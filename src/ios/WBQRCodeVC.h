@@ -9,4 +9,7 @@
 typedef void(^ScanCallBack)(NSString *result);
 @interface WBQRCodeVC : UIViewController
     @property (nonatomic, copy) ScanCallBack callBackBlock;
+    @property (nonatomic, readwrite) NSString * centerTitle;
+    @property (nonatomic, readwrite) NSString * cancelTitle;
+    @property (nonatomic, readwrite) NSString * bottomTitle;
 @end
